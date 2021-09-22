@@ -1,30 +1,32 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { Link } from 'react-router-dom';
+import isAuthContext from '../context/isAuthContext'
 
 const Navbar = () => {
-    return (
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">UseReducer</a>
+  
+  const authContex = useContext(isAuthContext);
+  console.log(authContex);
+  
+  const handleLogout = () => {
+    authContex.handleChangeIsAuth(false, '');
+  }
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Counter</a>
-                        </li>
-                    </ul>
-                    <div class="d-flex">
-                        <button class="btn btn-outline-success" type="submit">Logout</button>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    )
+
+  return (
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item" style={{ color: 'white' }}> {authContex.user} </li>
+        <li class="nav-item">
+          <button class="btn btn-outline-success" type="submit" onClick={handleLogout}>
+            Logout
+          </button>
+        </li>
+      </ul>
+    </nav>
+  )
 }
 
-export default Navbar
+export default Navbar;

@@ -1,33 +1,29 @@
-import React, { useReducer, useState, useContext } from 'react';
-import { authReducer, initialState } from '../reducers/authReducers';
-import { login, logout } from '../actions/authAction';
-import { Link, Redirect } from 'react-router-dom';
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import useForm from '../customHooks/useForm';
 import users from '../assets/users';
-import isAuthContext from '../context/isAuthContext';
 
-export const Login = () => {
-  const [state, dispatch] = useReducer(authReducer, initialState);
-  const [form, handleInputChange, reset] = useForm({ 'user': '', 'password': '' });
+const Registro = () => {
+  const [form, handleInputChange, reset] = useForm({ user: '', password: '', name: '' });
   const [isShow, setIsShow] = useState(false);
-  const authContex = useContext(isAuthContext);
 
   const handleSubmit = event => {
     event.preventDefault();
-
-    if(isExists(form.user, form.password)) {
-      authContex.handleChangeIsAuth(true, form.user);
-    } else {
-      alert("Usuario o contraseña incorrectos");
+    if (isExists(form.user)) {
+      alert("USUARIO YA EXISTE")
+    }
+    else {
+      alert("registrado correctamente");
+      users.push(form);
     }
 
     reset();
   }
 
-  const isExists = (user_, password_) => {
-    return users.some(user => user.user === user_ && user.password === password_);
+  const isExists = newUser => {
+    return users.some(user => user.user === newUser);
   }
- 
+
   const handleChange = event => {
     handleInputChange(event.target);
   }
@@ -39,10 +35,20 @@ export const Login = () => {
 
   return (
     <div>
-      <h1>Login</h1>
+      <h1> Registrandose </h1>
       <hr />
       <form onSubmit={handleSubmit}>
         <input
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+          placeholder="Nombre completo"
+          autoComplete="off"
+          required
+        />
+        <br />
+        <input
+          type="email"
           name="user"
           value={form.user}
           onChange={handleChange}
@@ -67,16 +73,15 @@ export const Login = () => {
           />
         </label>
         <br/>
-        <button
-          type="submit"
-          className="btn btn-primary"
-          onClick={() => dispatch(login('1234', 'Silvia Garcia'))}
-        >
-          Login
+        <button type="submit" className="btn btn-primary">
+          Registrarse
         </button>
       </form>
+
       <br />
       <Link to="/auth"> volver </Link>
     </div>
   )
 }
+
+export default Registro;
